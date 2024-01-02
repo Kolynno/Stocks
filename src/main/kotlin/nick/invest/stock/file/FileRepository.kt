@@ -59,7 +59,7 @@ class FileRepository {
             return null
         }
 
-        private fun updateFileWithDate(currentFile: File): File? {
+        private fun updateFileWithDate(currentFile: File): File {
             val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
             val currentDate = dateFormat.format(Date())
 
@@ -70,28 +70,19 @@ class FileRepository {
             val renamedFile = File(currentFile.parent, newFileName)
 
             currentFile.renameTo(renamedFile)
-
             return renamedFile
         }
 
         private fun findFileInTheFolder(folderPath: String, regexPattern: Regex): File? {
             val folder = File(folderPath)
             val files = folder.listFiles()
-
-
-
             files?.forEach { file ->
                 println(file.name)
                 if (file.isFile && regexPattern.matches(file.nameWithoutExtension)) {
                     return file
                 }
             }
-
             return null
         }
-
-
     }
-
-
 }

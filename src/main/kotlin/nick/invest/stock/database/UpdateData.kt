@@ -27,15 +27,10 @@ class UpdateData {
 
                 val httpClient: HttpClient = HttpClients.createDefault()
                 val httpGet = HttpGet(url)
-
                 try {
                     val response: HttpResponse = httpClient.execute(httpGet)
                     val reader = BufferedReader(InputStreamReader(response.entity.content))
-
-                    // Чтение ответа в виде строки
                     val csvString = reader.use(BufferedReader::readText)
-
-                    // Запись в файл CSV
                     val outputFile = File("src/main/resources/data/${ticker}_STOCK.csv")
                     outputFile.bufferedWriter().use { writer ->
                         csvString.lines().forEachIndexed { index, line ->

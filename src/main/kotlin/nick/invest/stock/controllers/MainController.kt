@@ -22,7 +22,6 @@ class MainController @Autowired constructor(
         return "Updated"
     }
 
-
     @GetMapping(path = ["/updateCSV"])
     @ResponseBody
     fun updateStocksCSV(): String {
@@ -52,5 +51,4 @@ class MainController @Autowired constructor(
         response["stocks"] = tickers
         return response
     }
-
 }

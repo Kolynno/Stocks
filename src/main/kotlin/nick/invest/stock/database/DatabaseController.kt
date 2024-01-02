@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 class DatabaseController @Autowired constructor(
     private val stockHistoryRepository: StockHistoryRepository
 ) {
-
     fun updateAllStocks() {
         val stockList: MutableList<StockHistory> = FileRepository.readDataFromCSV()
 
