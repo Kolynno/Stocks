@@ -1,14 +1,11 @@
 package nick.invest.stock.controllers
 
 import nick.invest.stock.database.DatabaseController
-import nick.invest.stock.database.StockHistory
 import nick.invest.stock.database.StockHistoryRepository
+import nick.invest.stock.database.UpdateData
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 
 
 @Controller
@@ -25,25 +22,35 @@ class MainController @Autowired constructor(
         return "Updated"
     }
 
+
+    @GetMapping(path = ["/updateCSV"])
+    @ResponseBody
+    fun updateStocksCSV(): String {
+        UpdateData.updateData(stockHistoryRepository)
+        return "Updated"
+    }
+
     @GetMapping(path = ["/stock"])
     @ResponseBody
-    fun getAllStocksHistory(@RequestParam ticker: String): Iterable<StockHistory> {
-        return stockHistoryRepository.getStockHistoryByTicker(ticker)
-    }
-    @GetMapping(path = ["/getTestData"])
-    @ResponseBody
-    fun getAllStocksHistory(): String {
-        val data = stockHistoryRepository.getStockHistoryByTicker("SBER")
+    fun getAllStocksHistory(@RequestParam ticker: String): String {
+        val data = stockHistoryRepository.getStockHistoryByTicker(ticker)
         val header = "id,ticker,date,open,high,low,close,vol\n"
         val strRet = header + data.toString().substring(1, data.toString().length - 1).replace(", ", "")
-        print(strRet)
         return strRet
     }
-
-
 
     @GetMapping(path = ["/main"])
     fun main(): String {
         return "main"
     }
+
+    @PostMapping("/getStocksNames")
+    @ResponseBody
+    fun getName(): Map<String, List<String>> {
+        val response: MutableMap<String, List<String>> = HashMap()
+        val tickers = stockHistoryRepository.getTickers()
+        response["stocks"] = tickers
+        return response
+    }
+
 }

@@ -12,7 +12,7 @@ class FileRepository {
 
     companion object {
 
-        private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yy")
+        private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         fun readDataFromCSV(): MutableList<StockHistory> {
 
@@ -25,15 +25,15 @@ class FileRepository {
                 }
                 csvReader.open(currentFile) {
                     readAllAsSequence().forEach { row ->
-                        if (row[0] != "<TICKER>") {
+                        if (row[0] != "SECID") {
                             val stockHistory = StockHistory(
                                 ticker = row[0],
-                                date = LocalDate.parse(row[2], dateFormatter),
-                                open = row[4].toDouble(),
-                                high = row[5].toDouble(),
-                                low = row[6].toDouble(),
-                                close = row[7].toDouble(),
-                                vol = row[8].toDouble()
+                                date = LocalDate.parse(row[1], dateFormatter),
+                                open = row[2].toDouble(),
+                                high = row[3].toDouble(),
+                                low = row[4].toDouble(),
+                                close = row[5].toDouble(),
+                                vol = row[6].toDouble()
                             )
                             stockDataList.add(stockHistory)
                         }
@@ -46,7 +46,7 @@ class FileRepository {
 
         private fun setFile(): File? {
             val folderPath = "src/main/resources/data"
-            val regexPattern = Regex("\\D*_FROM_2000")
+            val regexPattern = Regex("\\D*_STOCK")
 
             val currentFile = findFileInTheFolder(folderPath, regexPattern)
             if (currentFile != null) {
