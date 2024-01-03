@@ -9,10 +9,16 @@ body,
 
 
 table, th, td {
-    border: purple 1px solid;
+    border: black 1px solid;
     text-align: center;
+    padding: 5px;
 }
 
 table {
     border-collapse: collapse;
+}
+
+tbody tr:hover {
+    background: #000000; /* Цвет фона при наведении */
+    color: #fff; /* Цвет текста при наведении */
 }

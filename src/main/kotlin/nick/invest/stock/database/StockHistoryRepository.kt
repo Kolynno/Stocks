@@ -32,7 +32,7 @@ FROM
 JOIN stock.stock_history prev ON main.ticker = prev.ticker
 WHERE 
     main.date = (SELECT MAX(date) FROM stock.stock_history)
-    AND prev.date = DATE_SUB(main.date, INTERVAL 14 DAY);
+    AND prev.date = DATE_SUB(main.date, INTERVAL 20 DAY);
 """, nativeQuery = true)
     fun getTickerDateCloseForTable(): List<StockHistory>
 
