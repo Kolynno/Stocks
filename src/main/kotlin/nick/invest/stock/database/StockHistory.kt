@@ -7,7 +7,15 @@ import jakarta.persistence.Id
 import java.time.LocalDate
 
 @Entity
-class StockHistory(ticker: String, date: LocalDate, open: Double, high: Double, low: Double, close: Double, vol: Double) {
+class StockHistory(
+    ticker: String,
+    date: LocalDate,
+    open: Double,
+    high: Double,
+    low: Double,
+    close: Double,
+    vol: Double
+) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,9 +27,9 @@ class StockHistory(ticker: String, date: LocalDate, open: Double, high: Double, 
     var low: Double? = low
     var close: Double? = close
     var vol: Double? = vol
+    var close_14_days_ago: Double? = 0.0
 
     override fun toString(): String {
         return "$date,$open,$high,$low,$close,$vol\n"
     }
 }
-

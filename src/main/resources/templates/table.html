@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Главная: Таблицы</title>
+    <script src="/table.js"></script>
+    <link rel="stylesheet" href="/main.css">
+    <style>
+        /* Add your custom styles for green and red backgrounds here */
+        .positive-change { background-color: green; color: white; }
+        .negative-change { background-color: red; color: white; }
+    </style>
+</head>
+<body>
+<header>
+    <p>Процент <input type="number" id="thresholdInput" onkeydown="handleKeyPress(event)"></p>
+</header>
+<div id="container">
+    <table>
+        <thead>
+        <tr>
+            <th><a href="#" onclick="sortTable(0)">Тикер</a></th>
+            <th><a>Последняя дата</a></th>
+            <th><a href="#" onclick="sortTable(2)">Цена закрытия, руб</a></th>
+            <th><a href="#" onclick="sortTable(3)">Изменение акции за 14 дней, %</a></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${tableData}" th:class="${(row.close/row.close_14_days_ago - 1) * 100 >= threshold ? 'positive-change' : 'negative-change'}">
+            <td th:text="${row.ticker}"></td>
+            <td th:text="${row.date}"></td>
+            <td th:text="${row.close}"></td>
+            <td th:text="${#numbers.formatDecimal((row.close/row.close_14_days_ago - 1) * 100, 2, 2)}" class="percentage-change"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            updateRowStyles();
+        }
+    }
+
+    function updateRowStyles() {
+        var threshold = parseFloat(document.getElementById('thresholdInput').value);
+        var rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(function (row) {
+            var percentageChange = parseFloat(row.querySelector('.percentage-change').textContent);
+            var newClass = (percentageChange >= threshold) ? 'positive-change' : 'negative-change';
+
+            row.className = newClass;
+        });
+    }
+</script>
+</body>
+</html>

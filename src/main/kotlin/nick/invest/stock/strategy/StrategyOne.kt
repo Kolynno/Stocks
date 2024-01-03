@@ -1,48 +1,44 @@
 package nick.invest.stock.strategy
 
 class StrategyOne {
-    fun calculate(close: List<Double>, window: Int, count: Int) {
-
+    fun calculate(close: List<Double>, window: Int, count: Int): String {
         val positivePercent = 0.2 * window
 
-        val wArraySize = close.size/window
+        val wArraySize = close.size / window
         var currentClose = 0
         var currentWArrayIndex = 0
 
         var wArray = DoubleArray(wArraySize)
-        while(currentClose < close.size - window) {
+        while (currentClose < close.size - window) {
 
             val wEnd = close[currentClose + window]
             val wStart = close[currentClose]
 
-            //Save percent
+            // Save percent
             wArray[currentWArrayIndex] = (wEnd / wStart - 1) * 100
 
             currentClose += window
             currentWArrayIndex++
         }
-        calculateResult(wArray, count, positivePercent, window)
+        return calculateResult(wArray, count, positivePercent, window)
     }
 
-    private fun calculateResult(wArray: DoubleArray, count: Int, positivePercent: Double, window: Int) {
-
-//        for(w in wArray) {
-//            println(w)
-//        }
-
+    private fun calculateResult(wArray: DoubleArray, count: Int, positivePercent: Double, window: Int): String {
         var total = 0
         var positive = 0
 
         var currentWIndex = 0
-        while(currentWIndex < wArray.size - count - 1) {
+        while (currentWIndex < wArray.size - count - 1) {
 
+            var daySum = 0.0
             var isOk = true
-            for(i in 1..count) {
-                if(wArray[currentWIndex + count] < positivePercent) {
-                    isOk = false
-                }
+            for (i in 1..count) {
+                daySum += wArray[currentWIndex + count]
             }
 
+            if (daySum < positivePercent) {
+                isOk = false
+            }
             if (isOk && wArray[currentWIndex + count + 1] >= positivePercent) {
                 positive++
             }
@@ -51,9 +47,8 @@ class StrategyOne {
             currentWIndex++
         }
 
-        val percent = (positive.toDouble()/total.toDouble())
+        val percent = (positive.toDouble() / total.toDouble())
 
-        println("$percent\t$window\t$count")
-
+        return "$percent\t$window\t$count"
     }
 }
