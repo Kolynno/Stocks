@@ -41,7 +41,18 @@ class FileRepository {
                 }
                 currentFile = setFile()
             }
+            deleteAllData()
             return stockDataList
+        }
+
+        private fun deleteAllData() {
+            val folderPath = "src/main/resources/data"
+            val regexPattern = Regex("\\D*_STOCK")
+            var currentFile = findFileInTheFolder(folderPath, regexPattern)
+            while (currentFile != null) {
+                currentFile.delete()
+                currentFile = findFileInTheFolder(folderPath, regexPattern)
+            }
         }
 
         private fun setFile(): File? {
