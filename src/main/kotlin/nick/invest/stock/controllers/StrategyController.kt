@@ -1,6 +1,7 @@
 package nick.invest.stock.controllers
 
 import nick.invest.stock.database.*
+import nick.invest.stock.database.repositories.StockHistoryRepository
 import nick.invest.stock.strategy.StrategyOne
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -22,29 +23,29 @@ class StrategyController @Autowired constructor(
 
     @GetMapping("/one")
     @ResponseBody
-    fun strategyOne(): String {
+    fun strategyOne(@RequestParam start: String, @RequestParam end: String): String {
 
-        val outputFile = File("output.txt")
+        val outputFile = File("output.csv")
         outputFile.bufferedWriter().use { writer ->
             val tickers = stockHistoryRepository.getTickers()
+            writer.write("Ticker\tPercent\tWindow\tCount\tTotal\n")
+            for (ticker in tickers) {
 
-
-                val closeList = stockHistoryRepository.getCloseAndDateByTicketFromYear("SBER", "2000-01-01")
+                val closeList =
+                    stockHistoryRepository.getCloseAndDateByTicketFromYear(ticker, start, end)
                 val closeValues: List<Double> = closeList
 
                 val so = StrategyOne()
-                writer.write("SBER\n") // Write ticker name to file
-                writer.write("Percent\tW\tC\n")
 
-                for (w in 22..22) {
-                    for (c in 1..1) {
+                for (w in 1..20) {
+                    for (c in 1..20) {
                         val result = so.calculate(closeValues, w, c)
-                        writer.write("$result\t$w\t$c\n")
+                        writer.write("$ticker\t$result\n")
                     }
                 }
             }
+        }
 
-
-        return "Results written to output.txt"
+        return "Results written to output.csv"
     }
 }

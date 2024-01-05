@@ -20,6 +20,7 @@ class StrategyOne {
             currentClose += window
             currentWArrayIndex++
         }
+
         return calculateResult(wArray, count, positivePercent, window)
     }
 
@@ -28,18 +29,18 @@ class StrategyOne {
         var positive = 0
 
         var currentWIndex = 0
-        while (currentWIndex < wArray.size - count - 1) {
+        while (currentWIndex < wArray.size - count) {
 
             var daySum = 0.0
             var isOk = true
-            for (i in 1..count) {
-                daySum += wArray[currentWIndex + count]
+            for (i in 0 until count) {
+                daySum += wArray[currentWIndex + i]
             }
 
             if (daySum < positivePercent) {
                 isOk = false
             }
-            if (isOk && wArray[currentWIndex + count + 1] >= positivePercent) {
+            if (isOk && wArray[currentWIndex + count] >= positivePercent) {
                 positive++
             }
 
@@ -49,6 +50,6 @@ class StrategyOne {
 
         val percent = (positive.toDouble() / total.toDouble())
 
-        return "$percent\t$window\t$count"
+        return "${String.format("%.3f", percent)}\t$window\t$count\t$total"
     }
 }

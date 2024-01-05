@@ -1,7 +1,7 @@
 package nick.invest.stock.file
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import nick.invest.stock.database.StockHistory
+import nick.invest.stock.database.tables.StockHistory
 import java.io.File
 import java.text.SimpleDateFormat
 import java.time.LocalDate

@@ -1,4 +1,4 @@
-package nick.invest.stock.database
+package nick.invest.stock.database.tables
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -27,7 +27,6 @@ class StockHistory(
     var low: Double? = low
     var close: Double? = close
     var vol: Double? = vol
-    var close_14_days_ago: Double? = 0.0
 
     override fun toString(): String {
         return "$date,$open,$high,$low,$close,$vol\n"

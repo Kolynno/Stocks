@@ -1,6 +1,13 @@
 package nick.invest.stock.controllers
 
 import nick.invest.stock.database.*
+import nick.invest.stock.database.repositories.StockChangesRepository
+import nick.invest.stock.database.repositories.StockDividendsRepository
+import nick.invest.stock.database.repositories.StockHistoryRepository
+import nick.invest.stock.database.repositories.StockInfoRepository
+import nick.invest.stock.database.tables.StockChanges
+import nick.invest.stock.database.tables.StockDividends
+import nick.invest.stock.database.tables.StockInfo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -13,13 +20,16 @@ import java.io.File
 class MainController @Autowired constructor(
     private val stockHistoryRepository: StockHistoryRepository,
     private val databaseController: DatabaseController,
-    private val stockDividendsRepository: StockDividendsRepository
+    private val stockDividendsRepository: StockDividendsRepository,
+    private val stockInfoRepository: StockInfoRepository,
+    private val stockChangesRepository: StockChangesRepository
 ) {
 
     @GetMapping(path = ["/update"])
     @ResponseBody
     fun updateStocks(): String {
         databaseController.updateAllStocks()
+        stockChangesRepository.updateAll()
         return "Updated"
     }
 

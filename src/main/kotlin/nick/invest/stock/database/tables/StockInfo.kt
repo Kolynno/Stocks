@@ -1,18 +1,17 @@
-package nick.invest.stock.database
+package nick.invest.stock.database.tables
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import java.time.LocalDate
 
 @Entity
-class StockDividends(ticker: String, year: Int, percent: Double) {
+class StockInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Int = 0
-    var ticker: String? = ticker
-    var year: Int? = year
-    var percent: Double? = percent
+    var id: Int = 1
+    var ticker: String? = null
+    var name: String? = null
 }
-

@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/main.css">
     <style>
         /* Add your custom styles for green and red backgrounds here */
-        .positive-change { background-color: green; color: white; }
-        .negative-change { background-color: red; color: white; }
+        .positive-change { background-color: #006900; color: white; }
+        .negative-change { background-color: #810000; color: white; }
     </style>
 </head>
 <body>
@@ -19,19 +19,20 @@
     <table>
         <thead>
         <tr>
-            <th><a href="#" onclick="sortTable(0)">Тикер</a></th>
-            <th><a>Последняя дата</a></th>
-            <th><a href="#" onclick="sortTable(2)">Цена закрытия, руб</a></th>
-            <th><a href="#" onclick="sortTable(3)">Изменение акции за 14 дней, %</a></th>
+            <th>Тикер</th>
+            <th>Название</th>
+            <th>Последняя дата</th>
+            <th><a href="#" onclick="sortTable(3)">Цена закрытия, руб</a></th>
+            <th><a href="#" onclick="sortTable(4)">Изменение акции за 14 дней, %</a></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="row : ${tableData}" th:class="${(row.close/row.close_14_days_ago - 1) * 100 >= threshold ? 'positive-change' : 'negative-change'}">
+        <tr th:each="row : ${tableData}" th:class="${row.change14d >= threshold ? 'positive-change' : 'negative-change'}">
             <td th:text="${row.ticker}"></td>
+            <td th:text="${row.name}"></td>
             <td th:text="${row.date}"></td>
             <td th:text="${row.close}"></td>
-            <td th:text="${#numbers.formatDecimal((row.close/row.close_14_days_ago - 1) * 100, 2, 2)}" class="percentage-change"></td>
-
+            <td th:text="${row.change14d}" class="percentage-change"></td>
         </tr>
         </tbody>
     </table>

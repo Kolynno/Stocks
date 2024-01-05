@@ -1,5 +1,7 @@
 package nick.invest.stock.database
 
+import nick.invest.stock.database.repositories.StockHistoryRepository
+import nick.invest.stock.database.tables.StockHistory
 import nick.invest.stock.file.FileRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

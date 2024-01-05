@@ -1,5 +1,6 @@
 package nick.invest.stock.database
 
+import nick.invest.stock.database.repositories.StockHistoryRepository
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
