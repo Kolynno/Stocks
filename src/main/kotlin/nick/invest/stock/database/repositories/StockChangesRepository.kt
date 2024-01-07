@@ -11,7 +11,8 @@ interface StockChangesRepository: CrudRepository<StockChanges, Int> {
 
     @Transactional
     @Modifying
-    @Query("""UPDATE stock.stock_changes sc
+    @Query("""
+        UPDATE stock.stock_changes sc
 SET change14d = (
     (SELECT close
      FROM stock.stock_history sh

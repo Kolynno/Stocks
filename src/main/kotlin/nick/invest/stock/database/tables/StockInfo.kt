@@ -14,4 +14,5 @@ class StockInfo {
     var id: Int = 1
     var ticker: String? = null
     var name: String? = null
+    var capitalization: Int? = null
 }
