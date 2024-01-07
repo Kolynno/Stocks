@@ -33,7 +33,7 @@ class TableController @Autowired constructor(
         // Преобразование каждой строки в объект StockChange
         return rawData.map { line ->
             val parts = line.split(",") // Предположим, что данные разделены запятыми, замените на ваш разделитель
-            StockChange(parts[1], parts[4], parts[5], parts[2], parts[3])
+            StockChange(parts[1], parts[4], parts[5], parts[2], parts[3], parts[6])
         }
     }
 
@@ -46,5 +46,6 @@ data class StockChange(
     val name: String,
     val date: String,
     val close: String,
-    val change14d: String
+    val change14d: String,
+    val capitalization: String
 )

@@ -1,8 +1,8 @@
 package nick.invest.stock.strategy
 
 class StrategyOne {
-    fun calculate(close: List<Double>, window: Int, count: Int): String {
-        val positivePercent = 0.2 * window
+    fun calculate(close: List<Double>, window: Int, count: Int, percentPerDay: Double): String {
+        val positivePercent = percentPerDay * window
 
         val wArraySize = close.size / window
         var currentClose = 0

@@ -39,7 +39,7 @@ SET change14d = (
     fun updateAll()
 
 
-    @Query("""SELECT info.id, ch.ticker, sh.close, ch.change14d, info.name, sh.date
+    @Query("""SELECT info.id, ch.ticker, sh.close, ch.change14d, info.name, sh.date, info.capitalization
 FROM stock.stock_changes ch
 INNER JOIN stock.stock_info info ON ch.ticker = info.ticker
 INNER JOIN (

@@ -21,18 +21,20 @@
         <tr>
             <th>Тикер</th>
             <th>Название</th>
+            <th>Капитализация, млрд. руб</th>
             <th>Последняя дата</th>
-            <th><a href="#" onclick="sortTable(3)">Цена закрытия, руб</a></th>
-            <th><a href="#" onclick="sortTable(4)">Изменение акции за 16 дней, %</a></th>
+            <th><a href="#" onclick="sortTable(4)">Цена закрытия, руб</a></th>
+            <th><a href="#" onclick="sortTable(5)">Изменение акции за 16 дней, %</a></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="row : ${tableData}" th:class="${row.change14d >= threshold ? 'positive-change' : 'negative-change'}">
+        <tr th:each="row : ${tableData}" th:class="${(row.change14d >= threshold) ? 'positive-change' : 'negative-change'}">
             <td th:text="${row.ticker}"></td>
             <td th:text="${row.name}"></td>
+            <td th:text="${row.capitalization}"></td>
             <td th:text="${row.date}"></td>
             <td th:text="${row.close}"></td>
-            <td th:text="${row.change14d}" class="percentage-change"></td>
+            <td th:text="${#numbers.formatDecimal(row.change14d, 1, 'COMMA', 2, 'POINT')}" class="percentage-change"></td>
         </tr>
         </tbody>
     </table>

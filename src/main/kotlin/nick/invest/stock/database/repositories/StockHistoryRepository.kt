@@ -15,7 +15,7 @@ interface StockHistoryRepository: CrudRepository<StockHistory, Int> {
     @Query("SELECT  max(date) FROM stock.stock_history", nativeQuery = true)
     fun getLastDate(): String
 
-    @Query("SELECT close, date FROM stock.stock_history WHERE ticker = :ticker AND date >= :dateStart AND date <= :dateEnd ", nativeQuery = true)
+    @Query("SELECT close, date FROM stock.stock_history WHERE ticker = :ticker AND date >= :dateStart AND date <= :dateEnd", nativeQuery = true)
     fun getCloseAndDateByTicketFromYear(ticker: String, dateStart: String, dateEnd: String ):  List<Double>
 
 }

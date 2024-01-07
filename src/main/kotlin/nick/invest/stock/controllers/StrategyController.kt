@@ -23,7 +23,7 @@ class StrategyController @Autowired constructor(
 
     @GetMapping("/one")
     @ResponseBody
-    fun strategyOne(@RequestParam start: String, @RequestParam end: String): String {
+    fun strategyOne(@RequestParam start: String, @RequestParam end: String, @RequestParam percent: Double): String {
 
         val outputFile = File("output.csv")
         outputFile.bufferedWriter().use { writer ->
@@ -33,13 +33,14 @@ class StrategyController @Autowired constructor(
 
                 val closeList =
                     stockHistoryRepository.getCloseAndDateByTicketFromYear(ticker, start, end)
+
                 val closeValues: List<Double> = closeList
 
                 val so = StrategyOne()
 
                 for (w in 1..20) {
                     for (c in 1..20) {
-                        val result = so.calculate(closeValues, w, c)
+                        val result = so.calculate(closeValues, w, c, percent)
                         writer.write("$ticker\t$result\n")
                     }
                 }

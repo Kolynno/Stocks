@@ -15,7 +15,7 @@ class StockApplicationTests {
 
         for (w in 1 .. 10) {
             for (c in 2 .. 2) {
-                println(so.calculate(list, w, c))
+                //println(so.calculate(list, w, c))
             }
         }
 
