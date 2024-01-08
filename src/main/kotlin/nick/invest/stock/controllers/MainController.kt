@@ -33,6 +33,14 @@ class MainController @Autowired constructor(
         return "Updated"
     }
 
+    @GetMapping(path = ["/updateTemplate"])
+    @ResponseBody
+    fun updateStocksTemplates(): String {
+        databaseController.updateTemplates()
+        return "Updated"
+    }
+
+
     @GetMapping(path = ["/updateCSV"])
     @ResponseBody
     fun updateStocksCSV(): String {

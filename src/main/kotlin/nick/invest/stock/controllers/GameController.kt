@@ -24,7 +24,7 @@ class GameController @Autowired constructor(
     @GetMapping(path = ["/play"])
     fun main(@RequestParam ticker: String, @RequestParam w: Int, @RequestParam c: Int, @RequestParam percent: Double): String {
 
-        val closes = stockHistoryRepository.getCloseAndDateByTickerFromYear(ticker, "2019-01-01", "2024-01-01")
+        val closes = stockHistoryRepository.getCloseAndDateByTickerFromDateToDate(ticker, "2019-01-01", "2024-01-01")
         val dateList = stockHistoryRepository.getCloseAndDateByTicket()
         val closeList: List<Double> = closes
 

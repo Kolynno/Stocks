@@ -32,7 +32,7 @@ class StrategyController @Autowired constructor(
             for (ticker in tickers) {
 
                 val closeList =
-                    stockHistoryRepository.getCloseAndDateByTickerFromYear(ticker, start, end)
+                    stockHistoryRepository.getCloseAndDateByTickerFromDateToDate(ticker, start, end)
 
                 val closeValues: List<Double> = closeList
 

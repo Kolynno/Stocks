@@ -1,5 +1,7 @@
 package nick.invest.stock.strategy
 
+import nick.invest.stock.database.repositories.StockHistoryRepository
+
 class StrategyOne {
     fun calculate(close: List<Double>, window: Int, count: Int, percentPerDay: Double): String {
         val positivePercent = percentPerDay * window
@@ -51,5 +53,62 @@ class StrategyOne {
         val percent = (positive.toDouble() / total.toDouble())
 
         return "${String.format("%.3f", percent)}\t$window\t$count\t$total"
+    }
+
+    fun getWindowAndCount(ticker: String, stockHistoryRepository: StockHistoryRepository): List<Pair<Int, Int>> {
+
+        val pairList :MutableList<Pair<Int, Int>> = mutableListOf()
+
+        val closeList = stockHistoryRepository.getCloseAndDateByTickerFromDate(ticker, "2022-06-01")
+        val positivePercent = 0.2
+        var isOk = true
+
+        for (w in 1..20) {
+            for (c in 1..20) {
+
+                val wArray = getWArray(closeList, w)
+
+
+                //Возникает проблема, когда wArray малого размера из-за того, что мало дленй прошло акции
+                //то она тут outOfBounds
+                var daySum = 0.0
+                for (i in 0 until c) {
+                    if ((wArray.size - 1 - i) < 0) {
+                            break
+                        }
+                    daySum += wArray[wArray.size - 1 - i]
+                }
+
+                if (daySum < positivePercent) {
+                    isOk = false
+                }
+
+                if (isOk) {
+                    pairList.add(Pair(w,c))
+                }
+
+            }
+        }
+        return pairList
+    }
+
+    private fun getWArray(closeList: List<Double>, w: Int): DoubleArray {
+        val wArraySize = closeList.size / w
+        var currentClose = 0
+        var currentWArrayIndex = 0
+
+        var wArray = DoubleArray(wArraySize)
+        while (currentClose < closeList.size - w) {
+
+            val wEnd = closeList[currentClose + w]
+            val wStart = closeList[currentClose]
+
+            // Save percent
+            wArray[currentWArrayIndex] = (wEnd / wStart - 1) * 100
+
+            currentClose += w
+            currentWArrayIndex++
+        }
+        return wArray
     }
 }
