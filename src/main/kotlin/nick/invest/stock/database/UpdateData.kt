@@ -23,16 +23,18 @@ class UpdateData {
             val sdf = SimpleDateFormat("yyyy-MM-dd")
             val todayDate = sdf.format(currentDate)
 
+            //todo
             //SET INDEXes
-            setIMOEXindexToCSV(lastDate, todayDate)
+            //setIMOEXindexToCSV(lastDate, todayDate)
             //SET STOCKS
-            for(ticker in tickers) {
+            for (ticker in tickers) {
                 setDataToCSV(ticker, lastDate, todayDate)
             }
         }
 
         private fun setIMOEXindexToCSV(lastDate: String, todayDate: String?) {
-            val url = "https://iss.moex.com/iss/history/engines/stock/markets/index/securities/IMOEX.csv?from=$lastDate&till=$todayDate"
+            val url =
+                "https://iss.moex.com/iss/history/engines/stock/markets/index/securities/IMOEX.csv?from=$lastDate&till=$todayDate"
 
             val httpClient: HttpClient = HttpClients.createDefault()
             val httpGet = HttpGet(url)
@@ -48,17 +50,20 @@ class UpdateData {
                         }
                         val values = line.split(";")
                         if (values.size >= 15) {
-                            val selectedValues = listOf(values[0], values[1], values[4], values[5], values[6], values[7], values[14])
+                            val selectedValues =
+                                listOf(values[0], values[1], values[4], values[5], values[6], values[7], values[14])
                             writer.write(selectedValues.joinToString(";") + "\n")
                         }
                     }
                 }
                 println("Файл успешно создан в: ${outputFile.absolutePath}")
-            } finally {}
+            } finally {
+            }
         }
 
         private fun setDataToCSV(ticker: String, lastDate: String, todayDate: String?) {
-            val url = "https://iss.moex.com/iss/history/engines/stock/totals/boards/MRKT/securities/$ticker.csv?from=$lastDate&till=$todayDate"
+            val url =
+                "https://iss.moex.com/iss/history/engines/stock/totals/boards/MRKT/securities/$ticker.csv?from=$lastDate&till=$todayDate"
 
             val httpClient: HttpClient = HttpClients.createDefault()
             val httpGet = HttpGet(url)
@@ -74,13 +79,15 @@ class UpdateData {
                         }
                         val values = line.split(";")
                         if (values.size >= 15) {
-                            val selectedValues = listOf(values[0], values[1], values[4], values[5], values[6], values[7], values[14])
+                            val selectedValues =
+                                listOf(values[0], values[1], values[4], values[5], values[6], values[7], values[14])
                             writer.write(selectedValues.joinToString(";") + "\n")
                         }
                     }
                 }
                 println("Файл успешно создан в: ${outputFile.absolutePath}")
-            } finally {}
+            } finally {
+            }
         }
     }
 }
