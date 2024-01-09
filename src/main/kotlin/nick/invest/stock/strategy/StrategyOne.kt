@@ -61,29 +61,29 @@ class StrategyOne {
 
         val closeList = stockHistoryRepository.getCloseAndDateByTickerFromDate(ticker, "2022-06-01")
         val positivePercent = 0.2
-        var isOk = true
+
 
         for (w in 1..20) {
+            val wArray = getWArray(closeList, w)
             for (c in 1..20) {
-
-                val wArray = getWArray(closeList, w)
-
-
-                //Возникает проблема, когда wArray малого размера из-за того, что мало дленй прошло акции
-                //то она тут outOfBounds
-                var daySum = 0.0
+                var isOk = true
+                var wArrayIsOk = true
+                var daySum: MutableList<Double> = mutableListOf()
                 for (i in 0 until c) {
                     if ((wArray.size - 1 - i) < 0) {
+                            wArrayIsOk = false
                             break
                         }
-                    daySum += wArray[wArray.size - 1 - i]
+                    daySum.add(wArray[wArray.size - 1 - i])
                 }
 
-                if (daySum < positivePercent) {
+                val minDaySum = daySum.min()
+
+                if (minDaySum < positivePercent) {
                     isOk = false
                 }
 
-                if (isOk) {
+                if (isOk && wArrayIsOk) {
                     pairList.add(Pair(w,c))
                 }
 

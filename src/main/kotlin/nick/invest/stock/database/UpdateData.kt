@@ -27,7 +27,7 @@ class UpdateData {
             setIMOEXindexToCSV(lastDate, todayDate)
             //SET STOCKS
             for(ticker in tickers) {
-               // setDataToCSV(ticker, lastDate, todayDate)
+                setDataToCSV(ticker, lastDate, todayDate)
             }
         }
 

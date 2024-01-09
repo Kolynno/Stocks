@@ -48,7 +48,7 @@ class DatabaseController @Autowired constructor(
                 }
             }
             stock.window = bestWC.first
-            stock.window = bestWC.second
+            stock.count = bestWC.second
         }
         stockNowRepository.saveAll(stocks)
     }
