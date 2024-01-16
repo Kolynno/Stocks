@@ -3,12 +3,13 @@ package nick.invest.stock.controllers
 import nick.invest.stock.database.*
 import nick.invest.stock.database.repositories.StockChangesRepository
 import nick.invest.stock.database.repositories.StockHistoryRepository
-import nick.invest.stock.database.tables.StockChanges
-import nick.invest.stock.database.tables.StockHistory
+import nick.invest.stock.file.ExcelRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
 
 @Controller
@@ -19,8 +20,8 @@ class TableController @Autowired constructor(
 ) {
 
     @GetMapping("/main")
-    fun main(model: Model): String {
-        val tableData = getTableData()
+    fun main(model: Model, @RequestParam(required = false) createTable: Boolean): String {
+        val tableData = getTableData(createTable)
         model.addAttribute("tableData", tableData)
         return "table"
     }
@@ -28,24 +29,31 @@ class TableController @Autowired constructor(
 
     @GetMapping("/data")
     @ResponseBody
-    fun getTableData(): List<StockChange> {
+    fun getTableData(createTable: Boolean): List<StockChange> {
         val rawData = stockChangesRepository.getDataForTable()
-        // Преобразование каждой строки в объект StockChange
-        return rawData.map { line ->
-            val parts = line.split(",") // Предположим, что данные разделены запятыми, замените на ваш разделитель
-            StockChange(parts[1], parts[4], parts[5], parts[2], parts[3], parts[6])
+        val lines = rawData.map { line ->
+            val parts = line.split(",")
+            StockChange(parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7], parts[8], parts[9], parts[10])
         }
+
+        if (createTable) {
+            val excelRepository = ExcelRepository()
+            excelRepository.createTable(lines)
+        }
+
+        return lines
     }
-
-
-
 }
 
 data class StockChange(
     val ticker: String,
+    val close: String,
     val name: String,
     val date: String,
-    val close: String,
-    val change14d: String,
-    val capitalization: String
+    val capitalization: String,
+    val window: String,
+    val count: String,
+    val total: String,
+    val percent: String,
+    val change16d: String
 )

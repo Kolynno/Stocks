@@ -39,7 +39,8 @@ SET change14d = (
     fun updateAll()
 
 
-    @Query("""SELECT info.id, ch.ticker, sh.close, ch.change14d, info.name, sh.date, info.capitalization
+    //SPBE НЕ БЕРЕТСЯ
+    @Query("""SELECT info.id, ch.ticker, sh.close, info.name, sh.date, info.capitalization, st.window, st.count, st.total, st.percent, ch.change14d
 FROM stock.stock_changes ch
 INNER JOIN stock.stock_info info ON ch.ticker = info.ticker
 INNER JOIN (
@@ -47,7 +48,10 @@ INNER JOIN (
     FROM stock.stock_history
     GROUP BY ticker
 ) max_date_per_ticker ON max_date_per_ticker.ticker = info.ticker
-INNER JOIN stock.stock_history sh ON sh.ticker = info.ticker AND sh.date = max_date_per_ticker.max_date;
+INNER JOIN stock.stock_history sh ON sh.ticker = info.ticker AND sh.date = max_date_per_ticker.max_date 
+INNER JOIN stock.stock_templates st ON st.ticker = info.ticker
+INNER JOIN stock.stock_now sn ON sn.ticker = info.ticker
+WHERE ch.ticker NOT IN('IMOEX') AND st.window = sn.window AND st.count = sn.count ORDER BY percent DESC;
 
 """, nativeQuery = true)
     fun getDataForTable(): List<String>

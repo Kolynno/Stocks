@@ -38,8 +38,8 @@ class StrategyController @Autowired constructor(
 
                 val so = StrategyOne()
 
-                for (w in 1..20) {
-                    for (c in 1..20) {
+                for (w in 1..100) {
+                    for (c in 1..88) {
                         val result = so.calculate(closeValues, w, c, percent)
                         writer.write("$ticker\t$result\n")
                     }

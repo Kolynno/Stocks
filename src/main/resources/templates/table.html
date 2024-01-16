@@ -21,20 +21,28 @@
         <tr>
             <th>Тикер</th>
             <th>Название</th>
-            <th>Капитализация, млрд. руб</th>
-            <th>Последняя дата</th>
-            <th><a href="#" onclick="sortTable(4)">Цена закрытия, руб</a></th>
-            <th><a href="#" onclick="sortTable(5)">Изменение акции за 16 дней, %</a></th>
+            <th style="width: 100px;">Капитализация, млрд. руб</th>
+            <th style="width: 100px;">Последняя дата обновления</th>
+            <th style="width: 130px;"><a href="#" onclick="sortTable(4)">Цена закрытия, руб</a></th>
+            <th style="width: 140px;"><a href="#" onclick="sortTable(5)">Изменение акции за 16 дней, %</a></th>
+            <th style="width: 100px;">Окно на сегодня (W)</th>
+            <th style="width: 100px;">Просмотр назад (C)</th>
+            <th style="width: 200px;">Общее кол-во появления данной комбинации W и C за весь период акции</th>
+            <th><a href="#" onclick="sortTable(9)">Процент (P)</a></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="row : ${tableData}" th:class="${(row.change14d >= threshold) ? 'positive-change' : 'negative-change'}">
+        <tr th:each="row : ${tableData}" th:class="${(row.change16d >= threshold) ? 'positive-change' : 'negative-change'}">
             <td th:text="${row.ticker}"></td>
             <td th:text="${row.name}"></td>
             <td th:text="${row.capitalization}"></td>
             <td th:text="${row.date}"></td>
             <td th:text="${row.close}"></td>
-            <td th:text="${#numbers.formatDecimal(row.change14d, 1, 'COMMA', 2, 'POINT')}" class="percentage-change"></td>
+            <td th:text="${#numbers.formatDecimal(row.change16d, 1, 'COMMA', 2, 'POINT')}" class="percentage-change"></td>
+            <td th:text="${row.window}"></td>
+            <td th:text="${row.count}"></td>
+            <td th:text="${row.total}"></td>
+            <td th:text="${row.percent}"></td>
         </tr>
         </tbody>
     </table>

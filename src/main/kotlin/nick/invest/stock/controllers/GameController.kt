@@ -8,6 +8,8 @@ import nick.invest.stock.database.repositories.StockInfoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import kotlin.math.max
+import kotlin.math.roundToInt
 
 
 @Controller
@@ -22,23 +24,28 @@ class GameController @Autowired constructor(
 
 
     @GetMapping(path = ["/play"])
-    fun main(@RequestParam ticker: String, @RequestParam w: Int, @RequestParam c: Int, @RequestParam percent: Double): String {
+    fun main(@RequestParam ticker: String, @RequestParam w: Int, @RequestParam c: Int, @RequestParam percent: Double, @RequestParam dayStart: Int): String {
 
         val closes = stockHistoryRepository.getCloseAndDateByTickerFromDateToDate(ticker, "2019-01-01", "2024-01-01")
         val dateList = stockHistoryRepository.getCloseAndDateByTicket()
         val closeList: List<Double> = closes
 
+        var window = w
+        while(window > 0) {
 
-        var money = 100000
-        var stocks: Int = 0
+            var money = 100000
+            var stocks: Int = 0
+            var lastChoice = "s"
+            var maxPrice = 0.0
+            var buyPrice = 0.0
 
-        var day = 444
+        var day = dayStart
         while (day < dateList.size) {
 
 
                 var isOk = false
-                val change16d = (closeList[day] / closeList[day-16] - 1) * 100
-                if (change16d > w*percent) {
+                val change16d = (closeList[day - 1] / closeList[day-16] - 1) * 100
+                if (change16d > window*percent) {
                     isOk = true
                 }
 
@@ -46,26 +53,52 @@ class GameController @Autowired constructor(
             val change1d = (closeList[day] / closeList[day-1] - 1) * 100
             val change1dStr = String.format("%.2f", change1d)
 
-            println("Day:$day, date:${dateList[day]}, price:${closeList[day]}, 1dayChange:$change1dStr, buy:$isOk")
+            //println("Day:$day, date:${dateList[day]}, price:${closeList[day]}, 1dayChange:$change1dStr, buy:$isOk")
 
-            val act = readLine()
+            if (lastChoice == "b") {
+                maxPrice = max(maxPrice, closeList[day])
+            }
+
+
+            val act = chooseAct(lastChoice, closeList[day], isOk, maxPrice, buyPrice)
             when(act){
                 "b" -> {
                     stocks = (money/closeList[day]).toInt()
                     money = (money - stocks*closeList[day]).toInt()
+                    lastChoice = "b"
+                    buyPrice = closeList[day]
                 }
                 "s" -> {
                     money = (money + stocks*closeList[day]).toInt()
                     stocks = 0
+                    lastChoice = "s"
+                    maxPrice = 0.0
                 }
             }
 
 
-            println("stocks:$stocks, money:$money")
+            //println("stocks:$stocks, money:$money")
             day++
         }
 
+            println("TICKER:$ticker, W:$window, C:$c, Percent:$percent, Profit:${((closeList[closeList.size-1] * stocks + money)/1000).roundToInt() - 100}")
+            window--
+        }
         return "game"
+    }
+
+    private fun chooseAct(lastChoice: String, price: Double, isOk: Boolean, maxPrice: Double, buyPrice: Double): String {
+        if (isOk && lastChoice == "s") {
+            return "b"
+        }
+        if (lastChoice == "b" && maxPrice * 0.98 > price) {
+            return "s"
+        }
+        if (lastChoice == "b" && buyPrice * 0.98 > price) {
+            return "s"
+        }
+        return "\n"
+
     }
 
 

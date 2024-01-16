@@ -17,7 +17,7 @@ class UpdateData {
         fun updateData(stockHistoryRepository: StockHistoryRepository) {
 
             val tickers = stockHistoryRepository.getTickers()
-            val lastDate = stockHistoryRepository.getLastDate()
+            val lastDate = stockHistoryRepository.getLastDatePlusOne()
 
             val currentDate = Date()
             val sdf = SimpleDateFormat("yyyy-MM-dd")

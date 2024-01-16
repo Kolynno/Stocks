@@ -45,7 +45,7 @@ class MainController @Autowired constructor(
     @ResponseBody
     fun updateStocksCSV(): String {
         UpdateData.updateData(stockHistoryRepository)
-        return "Updated"
+        return "UpdatedCSV"
     }
 
     @GetMapping(path = ["/stock"])
