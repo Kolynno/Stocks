@@ -1,6 +1,5 @@
 package nick.invest.handle
 import java.io.File
-import java.lang.Math.abs
 
 fun main() {
 
@@ -25,10 +24,9 @@ fun main() {
             }
         }
 
-        val averageDays = getAVGDays(ticker)
-
         var counter = 0
-        var daysBetweenList = mutableListOf<Int>()
+        var lastPercent = 999.9
+        var days = mutableMapOf<Int, Int>()
 
         for (d in 1 until dataList.size) {
 
@@ -36,28 +34,56 @@ fun main() {
             val closeBefore = dataList[d-1].second
             val timeCurrent = dataList[d].first
             val percent = (closeCurrent/closeBefore - 1) * 100
-            if (timeCurrent == "10:00:00") {
-                counter++
-          if (ticker == "GTRK") {
-                println(ticker +";"+ String.format("%.2f", percent))
-            }
-                if (percent >= 10) {
-                    daysBetweenList.add(kotlin.math.abs(counter - averageDays))
-                    counter = 0
+            if (lastPercent == 999.9) {
+                lastPercent = percent
+            } else {
+                if (timeCurrent == "10:00:00") {
+                    if (percent > 0 && lastPercent > 0) {
+                        counter++
+                    } else if (percent <= 0 && lastPercent <= 0) {
+                        counter++
+                    } else if (percent > 0 && lastPercent <= 0) {
+                        if (days[counter] != null) {
+                            val num = days[counter]!! + 1
+                            days[counter] = num
+                        } else {
+                            days[counter] = 1
+                        }
+                        counter = 0
+                    } else if (percent <= 0 && lastPercent > 0) {
+                        if (days[counter] != null) {
+                            val num = days[counter]!! + 1
+                            days[counter] = num
+                        } else {
+                            days[counter] = 1
+                        }
+                        counter = 0
+                    }
                 }
             }
         }
-        if (counter != 0) {
-            daysBetweenList.add(kotlin.math.abs(counter - averageDays))
+
+
+        var totalDays = 0
+        for(d in days.toSortedMap()) {
+           totalDays += d.value
         }
-        totalData.add(Triple(ticker, "10" ,daysBetweenList.average()))
+
+
+        print("$ticker;")
+        for(d in days.toSortedMap()) {
+            if (((d.value.toDouble()/totalDays.toDouble())*100).toInt() != 0) {
+                print("${((d.value.toDouble() / totalDays.toDouble()) * 100).toInt()};")
+            }
+        }
+        print("0;\n")
+
+        //var outfile = File("E:\\Dowload\\Stocks2\\output.csv")
+        //outfile.appendText("$ticker;${percents.toSortedMap()}\n")
     }
 
 
-        var outfile = File("E:\\Dowload\\Stocks2\\output.csv")
-        for (triple in totalData) {
-            outfile.appendText("${triple.first};${String.format("%.2f",triple.third)};${triple.second}\n")
-        }
+
 
 }
 
